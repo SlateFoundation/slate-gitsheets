@@ -12,8 +12,8 @@
                 "<node_internals>/**"
             ],
             "env": {
-                "SLATE_HOST": "http://staging.example.slatepowered.net",
-                "SLATE_TOKEN": "",
+                "SLATE_HOST": "${config:rest-client.environmentVariables.slate.host}",
+                "SLATE_TOKEN": "${config:rest-client.environmentVariables.slate.token}",
             },
             "program": "${workspaceFolder}/bin/cli.js",
             "args": [
@@ -28,8 +28,8 @@
                 "<node_internals>/**"
             ],
             "env": {
-                "SLATE_HOST": "http://staging.example.slatepowered.net",
-                "SLATE_TOKEN": "",
+                "SLATE_HOST": "${config:rest-client.environmentVariables.slate.host}",
+                "SLATE_TOKEN": "${config:rest-client.environmentVariables.slate.token}",
             },
             "program": "${workspaceFolder}/bin/cli.js",
             "args": [
