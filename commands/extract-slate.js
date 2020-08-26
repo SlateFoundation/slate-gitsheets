@@ -7,8 +7,8 @@ exports.builder = {
   ref: {
     type: 'string',
     description: 'Git ref to commit containing slate gitsheets to update',
-    default: process.env.SLATE_REF || 'gitsheets/slate/master',
-    defaultDescription: 'SLATE_REF | "gitsheets/slate/master"'
+    default: process.env.SLATE_REF || 'gitsheets/slate',
+    defaultDescription: 'SLATE_REF | "gitsheets/slate"'
   },
   host: {
     type: 'string',
