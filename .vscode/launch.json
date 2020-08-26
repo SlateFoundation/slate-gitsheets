@@ -19,6 +19,22 @@
             "args": [
                 "extract-slate"
             ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch: load-slate",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "env": {
+                "SLATE_HOST": "http://staging.example.slatepowered.net",
+                "SLATE_TOKEN": "",
+            },
+            "program": "${workspaceFolder}/bin/cli.js",
+            "args": [
+                "load-slate"
+            ]
         }
     ]
 }
