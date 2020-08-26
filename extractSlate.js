@@ -84,14 +84,9 @@ async function extractSlate ({ ref, host, hostName, token, emptyCommit }) {
   // gather original users
   console.log('Loading existing users...')
   const existingUsersById = new Map()
-  const pendingUsers = []
   for await (const user of sheets.users.query()) {
     if (user.id) {
       existingUsersById.set(user.id, user)
-
-      if (user.id < 0) {
-        pendingUsers.push(user)
-      }
     }
   }
 
@@ -119,13 +114,6 @@ async function extractSlate ({ ref, host, hostName, token, emptyCommit }) {
 
     // write new blob into sheet
     const { blob, path } = await sheets.users.upsert(user)
-    console.log(`${blob.hash}\t${path}`)
-  }
-
-  // restore any pending users
-  console.log('Passing through pending users...')
-  for (const pendingUser of pendingUsers) {
-    const { blob, path } = await sheets.users.upsert(pendingUser)
     console.log(`${blob.hash}\t${path}`)
   }
 
