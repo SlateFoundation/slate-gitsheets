@@ -12,12 +12,12 @@
                 "<node_internals>/**"
             ],
             "env": {
-                "SLATE_TOKEN": ""
+                "SLATE_HOST": "http://staging.example.slatepowered.net",
+                "SLATE_TOKEN": "",
             },
             "program": "${workspaceFolder}/bin/cli.js",
             "args": [
-                "extract-slate",
-                "http://staging.example.slatepowered.net/"
+                "extract-slate"
             ]
         }
     ]

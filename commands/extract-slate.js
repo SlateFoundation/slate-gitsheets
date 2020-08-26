@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-exports.command = 'extract-slate <host>'
+exports.command = 'extract-slate'
 exports.desc = 'Extract data from a Slate API into Slate gitsheets'
 
 exports.builder = {
