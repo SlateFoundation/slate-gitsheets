@@ -64,6 +64,10 @@ const person = {
   Relationships: {
     field: 'relationships',
     discard: true
+  },
+  Mappings: {
+    field: 'mappings',
+    discard: true
   }
 }
 
