@@ -5,5 +5,6 @@ module.exports = {
   constants: require('./constants'),
   convertRecord: require('./convertRecord'),
   mappings: require('./mappings'),
+  patchUser: require('./patchUser'),
   templates: require('./templates')
 }
