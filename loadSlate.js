@@ -46,6 +46,7 @@ async function loadSlate ({ ref, host, hostName, token, emptyCommit, maxAge }) {
   const dirtyContactPoints = []
   const dirtyRelationships = []
   const peoplePatchMap = new Map()
+  const contactPointPatchMap = new Map()
   const relationshipPatchMap = new Map()
   const dirtyUsers = new Set()
   const slatePeopleTemporaryIdMap = new Map()
@@ -129,6 +130,22 @@ async function loadSlate ({ ref, host, hostName, token, emptyCommit, maxAge }) {
           }
 
           relationshipPatch[relatedPatchSubfield] = value
+        } else if (op === 'replace' && relatedPatchField === 'contact_points') {
+          console.log(`\t${op} contact point field ${relatedPatchSubfield} = ${value}`)
+
+          const contactPointId = change.dst[relatedPatchField][relatedPatchPosition].id
+          let contactPointPatch = contactPointPatchMap.get(contactPointId)
+          if (!contactPointPatch) {
+            contactPointPatch = {
+              id: contactPointId,
+              [PATCH_USER_KEY]: change.dst,
+              [PATCH_PATH_KEY]: path
+            }
+            contactPointPatchMap.set(contactPointId, contactPointPatch)
+            dirtyContactPoints.push(contactPointPatch)
+          }
+
+          contactPointPatch[relatedPatchSubfield] = value
         } else {
           throw new Error(`\tunhandled patch ${op} ${path}`)
         }
@@ -187,10 +204,19 @@ async function loadSlate ({ ref, host, hostName, token, emptyCommit, maxAge }) {
       })
 
       if (slatePeopleFailed.length > 0) {
-        // TODO: test how this impacts ID mapping
-        debugger
+        const failedPatches = []
+        for (const { record, validationErrors } of slatePeopleFailed) {
+          const failedIndex = slatePeoplePatches.findIndex(p => p.ID === record.ID)
 
-        throw new Error(`${slatePeopleFailed.length} people records failed to post`)
+          if (failedIndex === -1) {
+            throw new Error(`record ${record.ID} failed to save, but was not found in patch list`)
+          }
+
+          failedPatches.push(slatePeoplePatches[failedIndex])
+          slatePeoplePatches.splice(failedIndex, 1)
+
+          console.error(`failed to save record ${record.ID}; ${Object.keys(validationErrors).map(field => `${field}: ${validationErrors[field]}`).join(', ')}`)
+        }
       }
 
       if (!slatePeopleSuccess) {
