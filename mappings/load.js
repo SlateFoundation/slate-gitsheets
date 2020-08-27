@@ -36,7 +36,9 @@ const person = {
   Gender: 'gender',
   BirthDate: {
     field: 'birth_date',
-    convert: ({ birth_date }) => birth_date ? Math.round(birth_date.getTime() / 1000) : undefined
+    convert: ({ birth_date }) => birth_date
+      ? `${birth_date.getUTCFullYear()}-${birth_date.getUTCMonth() + 1}-${birth_date.getUTCDate()}`
+      : undefined
   },
   Location: 'location',
   About: 'about',
