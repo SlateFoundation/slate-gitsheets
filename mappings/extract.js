@@ -57,7 +57,6 @@ const person = {
 const contactPoint = {
   ...common,
 
-  person_id: 'PersonID',
   label: 'Label',
   data: {
     field: 'Data',
