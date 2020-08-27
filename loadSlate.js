@@ -442,7 +442,7 @@ async function loadSlate ({ ref, host, hostName, token, emptyCommit, maxAge }) {
   const treeHash = await workspace.root.write()
 
   if (emptyCommit || treeHash !== await git.getTreeHash(ancestor)) {
-    let commitMessage = `⥃ load data to ${slateApi.defaults.options.prefixUrl}`
+    let commitMessage = `⥃ ${COMMIT_ERRORS.length > 0 ? 'partially ' : ''}load data to ${slateApi.defaults.options.prefixUrl}`
 
     if (COMMIT_ERRORS.length) {
       commitMessage += `\n\n## ${COMMIT_ERRORS.length} errors:\n\n- ${COMMIT_ERRORS.join('\n- ')}`
