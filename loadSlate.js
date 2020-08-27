@@ -10,8 +10,14 @@ const RELATED_PATCH_RE = /^\/(?<field>relationships|contact_points)\/(?<position
 const PATCH_USER_KEY = Symbol('patch-user')
 const PATCH_PATH_KEY = Symbol('patch-path')
 const PATCH_SOURCE_KEY = Symbol('patch-source')
+const COMMIT_ERRORS = []
 
 // library
+function logError (error) {
+  console.error(error)
+  COMMIT_ERRORS.push(error)
+}
+
 async function loadSlate ({ ref, host, hostName, token, emptyCommit, maxAge }) {
   const slateApi = require('./api')({ host, token })
 
@@ -75,7 +81,7 @@ async function loadSlate ({ ref, host, hostName, token, emptyCommit, maxAge }) {
         console.log(`\tinsert ${value.length} contact point(s)`)
 
         // TODO: test this route
-        debugger
+        throw new Error('TODO: test this route')
 
         for (const valueItem of value) {
           valueItem[PATCH_USER_KEY] = change.dst
@@ -215,7 +221,7 @@ async function loadSlate ({ ref, host, hostName, token, emptyCommit, maxAge }) {
           failedPatches.push(slatePeoplePatches[failedIndex])
           slatePeoplePatches.splice(failedIndex, 1)
 
-          console.error(`failed to save record ${record.ID}; ${Object.keys(validationErrors).map(field => `${field}: ${validationErrors[field]}`).join(', ')}`)
+          logError(`failed to save record ${record.ID}; ${Object.keys(validationErrors).map(field => `${field}: ${validationErrors[field]}`).join(', ')}`)
         }
       }
 
@@ -246,7 +252,7 @@ async function loadSlate ({ ref, host, hostName, token, emptyCommit, maxAge }) {
         dirtyUsers.add(existingUser)
       }
     } catch (err) {
-      console.error('Failed to upload people:', err.response && err.response.body ? err.response.body : err.message)
+      logError('Failed to upload people:', err.response && err.response.body ? err.response.body : err.message)
       return
     }
   }
@@ -293,7 +299,7 @@ async function loadSlate ({ ref, host, hostName, token, emptyCommit, maxAge }) {
       if (slateContactPointsFailed.length > 0) {
         const failedIds = new Set()
         for (const { record, validationErrors } of slateContactPointsFailed) {
-          console.error(`failed to save contact point ${record.ID}:\n\t${Object.keys(validationErrors).map(field => `${field}: ${validationErrors[field]}`).join('\n\t')}`)
+          logError(`failed to save contact point ${record.ID}:\n\t${Object.keys(validationErrors).map(field => `${field}: ${validationErrors[field]}`).join('\n\t')}`)
           failedIds.add(record.ID)
         }
 
@@ -327,7 +333,7 @@ async function loadSlate ({ ref, host, hostName, token, emptyCommit, maxAge }) {
         dirtyUsers.add(user)
       }
     } catch (err) {
-      console.error('Failed to upload contact points:', err.response && err.response.body ? err.response.body : err.message)
+      logError('Failed to upload contact points:', err.response && err.response.body ? err.response.body : err.message)
       return
     }
   }
@@ -384,7 +390,7 @@ async function loadSlate ({ ref, host, hostName, token, emptyCommit, maxAge }) {
       if (slateRelationshipsFailed.length > 0) {
         const failedIds = new Set()
         for (const { record, validationErrors } of slateRelationshipsFailed) {
-          console.error(`failed to save relationship ${record.ID}:\n\t${Object.keys(validationErrors).map(field => `${field}: ${validationErrors[field]}`).join('\n\t')}`)
+          logError(`failed to save relationship ${record.ID}:\n\t${Object.keys(validationErrors).map(field => `${field}: ${validationErrors[field]}`).join('\n\t')}`)
           failedIds.add(record.ID)
         }
 
@@ -418,7 +424,7 @@ async function loadSlate ({ ref, host, hostName, token, emptyCommit, maxAge }) {
         dirtyUsers.add(user)
       }
     } catch (err) {
-      console.error('Failed to upload relationships:', err.response && err.response.body ? err.response.body : err.message)
+      logError('Failed to upload relationships:', err.response && err.response.body ? err.response.body : err.message)
       return
     }
   }
@@ -436,9 +442,17 @@ async function loadSlate ({ ref, host, hostName, token, emptyCommit, maxAge }) {
   const treeHash = await workspace.root.write()
 
   if (emptyCommit || treeHash !== await git.getTreeHash(ancestor)) {
+    let commitMessage = `⥃ load data to ${slateApi.defaults.options.prefixUrl}`
+
+    if (COMMIT_ERRORS.length) {
+      commitMessage += `\n\n## ${COMMIT_ERRORS.length} errors:\n\n- ${COMMIT_ERRORS.join('\n- ')}`
+    }
+
+    commitMessage += `\n\nLoaded-to: ${hostName}`
+
     const commitHash = await git.commitTree(treeHash, {
       p: ancestor,
-      m: `⥃ load data to ${slateApi.defaults.options.prefixUrl}\n\nLoaded-to: ${hostName}`
+      m: commitMessage
     })
     await git.updateRef(`refs/heads/${ref}`, commitHash)
     console.log(`committed new Slate tree to "${ref}": ${ancestor}->${commitHash}`)
