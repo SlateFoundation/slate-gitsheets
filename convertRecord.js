@@ -10,7 +10,7 @@ function convertRecord (input, mappings) {
       const value = input[config]
 
       if (typeof value !== 'undefined') {
-        output[field] = value
+        output[field] = value === '' ? null : value
       }
 
       unusedKeys.delete(config)
