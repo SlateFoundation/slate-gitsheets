@@ -31,13 +31,15 @@ async function patchUser (original, patch) {
         if (original.mappings) {
           ([existingMapping] = original.mappings.filter(
             p => p.connection === mapping.connection &&
-                 p.kind === mapping.kind
+            p.kind === mapping.kind &&
+            (p.field === mapping.field || (!p.field && mapping.field === 'id'))
           ))
         } else {
           original.mappings = []
         }
 
         if (existingMapping) {
+          existingMapping.field = mapping.field
           existingMapping.key = mapping.key
         } else {
           original.mappings.push(mapping)
