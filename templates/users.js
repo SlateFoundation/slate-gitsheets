@@ -10,6 +10,9 @@ module.exports = {
     },
     relationships: {
       sort: ['id == null', 'slot', 'id', 'kind', 'label', 'related_person_id']
+    },
+    mapping: {
+      sort: ['id == null', 'id', 'kind', 'field']
     }
   }
 }
