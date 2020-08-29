@@ -41,6 +41,7 @@ async function patchUser (original, patch) {
         if (existingMapping) {
           existingMapping.field = mapping.field
           existingMapping.key = mapping.key
+          existingMapping.matched_via = mapping.matched_via
         } else {
           original.mappings.push(mapping)
         }
