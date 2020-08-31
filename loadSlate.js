@@ -429,6 +429,10 @@ async function loadSlate ({ ref, host, hostName, token, emptyCommit, maxAge }) {
     }
   }
 
+  // TODO: upload sections
+
+  // TODO: upload enrollments, mapping temporary user ids
+
   // save all updated users
   console.log(`saving ${dirtyUsers.size} dirty user records`)
   for (const dirtyUser of dirtyUsers) {
