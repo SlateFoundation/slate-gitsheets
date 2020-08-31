@@ -1,6 +1,7 @@
 // dependencies
 const Repository = require('gitsheets/lib/Repository')
 const convertRecord = require('./convertRecord')
+const patchUser = require('./patchUser')
 const slateExtractMappings = require('./mappings/extract')
 
 // constants
@@ -99,16 +100,16 @@ async function extractSlate ({ ref, host, hostName, token, emptyCommit }) {
     if (user.id) {
       const existingUser = existingUsersById.get(user.id)
       if (existingUser) {
-        user = Object.assign(existingUser, user)
+        user = await patchUser(existingUser, user)
       }
     }
 
     // remove empty arrays
-    if (user.contact_points.length === 0) {
+    if (user.contact_points && user.contact_points.length === 0) {
       delete user.contact_points
     }
 
-    if (user.relationships.length === 0) {
+    if (user.relationships && user.relationships.length === 0) {
       delete user.relationships
     }
 
