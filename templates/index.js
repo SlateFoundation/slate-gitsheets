@@ -1,4 +1,5 @@
 module.exports = {
   users: require('./users'),
-  sections: require('./sections')
+  sections: require('./sections'),
+  enrollments: require('./enrollments')
 }
