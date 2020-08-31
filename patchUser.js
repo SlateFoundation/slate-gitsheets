@@ -47,7 +47,29 @@ async function patchUser (original, patch) {
         }
       }
     } else if (field === 'relationships') {
-      throw new Error('merging relationships is not yet implemented')
+      for (const relationship of patch.relationships) {
+        let existingRelationship
+
+        if (original.relationships) {
+          throw new Error('merging relationships is not yet tested')
+          // ([existingRelationship] = original.relationships.filter(
+          //   p => p.id === relationship.id ||
+          //        (
+          //          p.kind === relationship.kind &&
+          //           p.data === relationship.data
+          //        )
+          // ))
+        } else {
+          original.relationships = []
+        }
+
+        if (existingRelationship) {
+          throw new Error('merging relationships is not yet tested')
+          // existingRelationship.label = relationship.label
+        } else {
+          original.relationships.push(relationship)
+        }
+      }
     } else {
       original[field] = patch[field]
     }
