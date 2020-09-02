@@ -6,6 +6,7 @@ module.exports = {
   convertRecord: require('./convertRecord'),
   mappings: require('./mappings'),
   patchUser: require('./patchUser'),
+  patchCourse: require('./patchCourse'),
   patchSection: require('./patchSection'),
   templates: require('./templates')
 }
