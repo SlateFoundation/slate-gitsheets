@@ -6,7 +6,7 @@ exports.desc = 'Load data into a Slate API from Slate gitsheets'
 exports.builder = {
   ref: {
     type: 'string',
-    description: 'Git ref to commit containing slate gitsheets to update',
+    description: 'Git ref to commit containing Slate gitsheets to load changes from',
     default: process.env.SLATE_REF || 'gitsheets/slate',
     defaultDescription: 'SLATE_REF | "gitsheets/slate"'
   },
@@ -42,7 +42,7 @@ exports.builder = {
   'empty-commit': {
     type: 'boolean',
     description: 'Whether to make a commit even when no changes are found',
-    default: true
+    default: false
   },
   'max-age': {
     description: 'Max age in seconds for the load base',
@@ -74,6 +74,6 @@ exports.handler = async function (argv) {
     argv.hostName = argv.host.replace(/^https?:\/\/([^/]+).*$/, '$1')
   }
 
-  const commit = await loadSlate({ ...argv, emptyCommit: false })
+  const commit = await loadSlate(argv)
   console.log(`commit=${commit || ''}`)
 }
