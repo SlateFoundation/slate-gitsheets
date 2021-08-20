@@ -1,6 +1,6 @@
 {
     "name": "slate-gitsheets",
-    "version": "0.1.0",
+    "version": "0.0.0",
     "author": "Jarvus Innovations <hello@jarv.us>",
     "description": "A small library for working with gitsheets for Slate",
     "repository": {
