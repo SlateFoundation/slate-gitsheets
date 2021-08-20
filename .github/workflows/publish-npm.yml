@@ -24,8 +24,8 @@ jobs:
     - name: Setting package.json version
       run: npm version --no-git-tag-version "${SOURCE_TAG#v}"
 
-    - run: cd backend && npm install
+    - run: npm install
 
-    - run: cd backend && npm publish
+    - run: npm publish
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
