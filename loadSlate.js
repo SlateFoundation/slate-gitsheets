@@ -152,6 +152,22 @@ async function loadSlate ({ ref, host, hostName, token, emptyCommit, maxAge }) {
           }
 
           contactPointPatch[relatedPatchSubfield] = value
+        } else if (op === 'replace' && relatedPatchField === 'relationships') {
+          console.log(`\t${op} relationship field ${relatedPatchSubfield} = ${value}`)
+
+          const relationshipId = change.dst[relatedPatchField][relatedPatchPosition].id
+          let relationshipPatch = relationshipPatchMap.get(relationshipId)
+          if (!relationshipPatch) {
+            relationshipPatch = {
+              id: relationshipId,
+              [PATCH_USER_KEY]: change.dst,
+              [PATCH_PATH_KEY]: path
+            }
+            relationshipPatchMap.set(relationshipId, relationshipPatch)
+            dirtyRelationships.push(relationshipPatch)
+          }
+
+          relationshipPatch[relatedPatchSubfield] = value
         } else {
           throw new Error(`\tunhandled patch ${op} ${path}`)
         }
