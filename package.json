@@ -13,7 +13,7 @@
     },
     "dependencies": {
         "@iarna/toml": "^2.2.5",
-        "gitsheets": "^0.16.0",
+        "gitsheets": "^0.21.2",
         "got": "^11.5.2",
         "yargs": "^15.4.1"
     }
