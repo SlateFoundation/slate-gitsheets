@@ -315,7 +315,7 @@ async function loadSlate ({ ref, host, hostName, token, emptyCommit, maxAge }) {
       if (slateContactPointsFailed.length > 0) {
         const failedIds = new Set()
         for (const { record, validationErrors } of slateContactPointsFailed) {
-          logError(`failed to save contact point ${record.ID}:\n\t${Object.keys(validationErrors).map(field => `${field}: ${validationErrors[field]}`).join('\n\t')}`)
+          logError(`failed to save contact point ${record.Class}#${record.ID} ("${record.Label}" <${record.Data}>) for person ${record.PersonID}:\n\t${Object.keys(validationErrors).map(field => `${field}: ${validationErrors[field]}`).join('\n\t')}`)
           failedIds.add(record.ID)
         }
 
@@ -406,7 +406,7 @@ async function loadSlate ({ ref, host, hostName, token, emptyCommit, maxAge }) {
       if (slateRelationshipsFailed.length > 0) {
         const failedIds = new Set()
         for (const { record, validationErrors } of slateRelationshipsFailed) {
-          logError(`failed to save relationship ${record.ID}:\n\t${Object.keys(validationErrors).map(field => `${field}: ${validationErrors[field]}`).join('\n\t')}`)
+          logError(`failed to save relationship ${record.Class}#${record.ID} (${record.Slot}: "${record.Label}" <${record.RelatedPersonID}>) for person ${record.PersonID}:\n\t${Object.keys(validationErrors).map(field => `${field}: ${validationErrors[field]}`).join('\n\t')}`)
           failedIds.add(record.ID)
         }
 
