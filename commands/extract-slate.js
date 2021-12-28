@@ -58,6 +58,11 @@ exports.handler = async function (argv) {
     argv.hostName = argv.host.replace(/^https?:\/\/([^/]+).*$/, '$1')
   }
 
+  if (!argv.token) {
+    const login = require('../login')
+    argv.token = await login(argv)
+  }
+
   const commit = await extractSlate(argv)
   console.log(`commit=${commit || ''}`)
 }
