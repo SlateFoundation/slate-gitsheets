@@ -39,6 +39,24 @@
             "args": [
                 "load-slate"
             ]
-        }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch: merge-contacts",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "env": {
+                // "SLATE_HOST": "${config:rest-client.environmentVariables.slate.host}",
+                // "SLATE_TOKEN": "${config:rest-client.environmentVariables.slate.token}",
+            },
+            "cwd": "${workspaceFolder:myschool}",
+            "program": "${workspaceFolder}/bin/cli.js",
+            "args": [
+                "merge-contacts"
+            ]
+        },
     ]
 }
