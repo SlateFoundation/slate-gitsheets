@@ -31,8 +31,8 @@ async function patchUser (original, patch) {
         if (original.mappings) {
           ([existingMapping] = original.mappings.filter(
             p => p.connection === mapping.connection &&
-            p.kind === mapping.kind &&
-            (p.field === mapping.field || (!p.field && mapping.field === 'id'))
+                 p.kind === mapping.kind &&
+                 (p.field === mapping.field || (!p.field && mapping.field === 'id'))
           ))
         } else {
           original.mappings = []
@@ -51,21 +51,20 @@ async function patchUser (original, patch) {
         let existingRelationship
 
         if (original.relationships) {
-          throw new Error('merging relationships is not yet tested')
-          // ([existingRelationship] = original.relationships.filter(
-          //   p => p.id === relationship.id ||
-          //        (
-          //          p.kind === relationship.kind &&
-          //           p.data === relationship.data
-          //        )
-          // ))
+          ([existingRelationship] = original.relationships.filter(
+            p => p.id === relationship.id ||
+                 p.related_person_id === relationship.related_person_id
+          ))
         } else {
           original.relationships = []
         }
 
         if (existingRelationship) {
-          throw new Error('merging relationships is not yet tested')
-          // existingRelationship.label = relationship.label
+          for (const relationshipField of ['kind', 'label', 'slot', 'notes']) {
+            if (relationshipField in relationship) {
+              existingRelationship[relationshipField] = relationship[relationshipField]
+            }
+          }
         } else {
           original.relationships.push(relationship)
         }
