@@ -9,10 +9,11 @@ const { EMPTY_TREE_HASH } = require('./constants')
 
 // library
 async function extractSlate ({ ref, host, hostName, token, emptyCommit }) {
+  // initialize `got` instance with Slate API wrapper
   const slateApi = require('./api')({ host, token })
-  const users = new Map()
 
   // collect users
+  const users = new Map()
   console.log('Downloading people...')
   const { data: slatePeople } = await slateApi('people', {
     searchParams: { status: '*' }
