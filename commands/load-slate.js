@@ -31,7 +31,8 @@ exports.builder = {
   'host-name': {
     type: 'string',
     description: 'Canonical host identifier to tag commits with',
-    defaultDescription: 'hostName(host)'
+    default: process.env.SLATE_HOST_NAME,
+    defaultDescription: 'SLATE_HOST_NAME | hostName(host)'
   },
   token: {
     type: 'string',
