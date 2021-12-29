@@ -1,5 +1,8 @@
+const emptyStrings = new Set(['none', 'null'])
+
 const templates = {
   mother: {
+    aliases: ['m', 'mot'],
     relationship: {
       kind: 'Emergence\\People\\GuardianRelationship'
     },
@@ -13,6 +16,7 @@ const templates = {
     }
   },
   father: {
+    aliases: ['f', 'fat'],
     relationship: {
       kind: 'Emergence\\People\\GuardianRelationship'
     },
@@ -36,10 +40,11 @@ const templates = {
     }
   },
   guardian: {
+    aliases: ['legal guardian'],
     relationship: {
       kind: 'Emergence\\People\\GuardianRelationship'
     },
-    inverse: 'dependent'
+    inverse: 'ward'
   },
   grandmother: {
     person: {
@@ -96,6 +101,7 @@ const templates = {
     }
   },
   stepmother: {
+    aliases: ['stm'],
     person: {
       gender: 'female'
     },
@@ -106,6 +112,7 @@ const templates = {
     }
   },
   stepfather: {
+    aliases: ['stf'],
     person: {
       gender: 'male'
     },
@@ -350,9 +357,30 @@ for (const label in templates) {
 }
 
 function normalizeLabel (label) {
+  if (!label) {
+    return null
+  }
+
   label = label.replace(/-/g, '') // remove hyphens
   label = label.trim().replace(/\s{2,}/g, ' ') // collapse
   label = label.toLowerCase()
+
+  if (emptyStrings.has(label)) {
+    return null
+  }
+
+  for (const canonical in templates) {
+    const aliases = [canonical, ...templates[canonical].aliases || []]
+
+    for (const alias of aliases) {
+      if (label.localeCompare(alias, undefined, { ignorePunctuation: true, sensitivity: 'base' }) === 0) {
+        return canonical
+      }
+    }
+  }
+
+  console.warn(`could not canonicalize label "${label}"`)
+
   return label
 }
 
@@ -371,12 +399,14 @@ function getTemplate (label) {
 }
 
 function isStandardLabel (label) {
-  return label in templates
+  return Boolean(getTemplate(label))
 }
 
 function getInverseLabel (label, gender = 'neutral') {
-  return isStandardLabel(label)
-    ? templates[label].inverse[normalizeGender(gender)]
+  const template = getTemplate(label)
+
+  return template
+    ? template.inverse[normalizeGender(gender)]
     : null
 }
 
