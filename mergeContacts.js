@@ -163,6 +163,8 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
       studentUser.relationships = []
     }
 
+    const matchedGuardianEmails = new Set()
+
     for (const slotName of ['guardian1', 'guardian2']) {
       let guardianUser
       let guardianUserDirty = false
@@ -191,8 +193,16 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
       // try to find parent by email
       if (!guardianUser && guardianEmail) {
         for (const slot in guardianEmail) {
-          if (guardianUser = usersByEmail.get(guardianEmail[slot])) { // eslint-disable-line no-cond-assign
-            break
+          const email = guardianEmail[slot]
+          if (guardianUser = usersByEmail.get(email)) { // eslint-disable-line no-cond-assign
+            if (matchedGuardianEmails.has(email)) {
+              console.warn(`Guardian ${guardian.name} for student ${student.name} shares email ${email} with previous guardian, deleting...`)
+              guardianUser = null
+              delete guardianEmail[slot]
+            } else {
+              matchedGuardianEmails.add(email)
+              break
+            }
           }
         }
       }
