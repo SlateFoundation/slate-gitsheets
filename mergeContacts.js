@@ -176,7 +176,12 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
         phone: guardianPhone = {},
         email: guardianEmail = {}
       } = guardian
+
       const guardianLabel = normalizeRelationshipLabel(guardian.relationship || 'guardian')
+
+      if (!isStandardRelationshipLabel(guardianLabel)) {
+        console.warn(`using nonstandard relationship label "${guardianLabel}" for guardian ${guardian.name} of student ${student.name}`)
+      }
 
       // try to match on exiting user_id annotation first
       if (guardian.user_id) {
@@ -301,8 +306,8 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
       // upsert guardian->ward relationship
       const wardLabel = getInverseRelationshipLabel(guardianLabel, studentUser.gender) || 'ward'
 
-      if (!isStandardRelationshipLabel(guardianLabel)) {
-        console.warn(`using nonstandard relationship label "${guardianLabel}" for guardian ${guardian.name}`)
+      if (!isStandardRelationshipLabel(wardLabel)) {
+        console.warn(`using nonstandard relationship label "${wardLabel}" for ward ${student.name} of guardian ${guardian.name}`)
       }
 
       const existingWardRelationship = guardianUser.relationships.filter(
