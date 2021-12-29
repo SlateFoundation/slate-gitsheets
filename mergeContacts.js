@@ -125,7 +125,7 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
 
       const [existingContactPoint] = studentUser.contact_points.filter(
         p => p.kind === KIND_PHONE &&
-                     p.data === data
+             p.data === data
       )
 
       if (!existingContactPoint) {
@@ -257,7 +257,7 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
 
         const [existingContactPoint] = guardianUser.contact_points.filter(
           p => p.kind === KIND_PHONE &&
-                         p.data === data
+               p.data === data
         )
 
         if (!existingContactPoint) {
