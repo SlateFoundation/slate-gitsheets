@@ -143,7 +143,7 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
 
       const [existingContactPoint] = studentUser.contact_points.filter(
         p => p.kind === KIND_EMAIL &&
-             p.data === data
+             p.data.localeCompare(data, undefined, { sensitivity: 'accent' }) === 0
       )
 
       if (!existingContactPoint) {
@@ -275,7 +275,7 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
 
         const [existingContactPoint] = guardianUser.contact_points.filter(
           p => p.kind === KIND_EMAIL &&
-               p.data === data
+               p.data.localeCompare(data, undefined, { sensitivity: 'accent' }) === 0
         )
 
         if (!existingContactPoint) {
