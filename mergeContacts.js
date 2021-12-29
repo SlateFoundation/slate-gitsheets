@@ -242,6 +242,14 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
         // console.log(`student '${student.name}' has new guardian ${guardianUser.first_name} ${guardianUser.last_name} <${guardianUser.username || ''}>`);
       } else {
         console.log(`student '${student.name}' has existing guardian ${guardianUser.first_name} ${guardianUser.last_name} <${guardianUser.username || ''}>`)
+
+        if (!guardianUser.contact_points) {
+          guardianUser.contact_points = []
+        }
+
+        if (!guardianUser.relationships) {
+          guardianUser.relationships = []
+        }
       }
 
       // decorate import guardian with ID if it is not a phantom (negative) ID
@@ -295,10 +303,6 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
 
       if (!isStandardRelationshipLabel(guardianLabel)) {
         console.warn(`using nonstandard relationship label "${guardianLabel}" for guardian ${guardian.name}`)
-      }
-
-      if (!guardianUser.relationships) {
-        guardianUser.relationships = []
       }
 
       const existingWardRelationship = guardianUser.relationships.filter(
