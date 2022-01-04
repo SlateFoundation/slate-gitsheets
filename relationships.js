@@ -16,7 +16,7 @@ const templates = {
     }
   },
   father: {
-    aliases: ['f', 'fat'],
+    aliases: ['f', 'fr', 'fat'],
     relationship: {
       kind: 'Emergence\\People\\GuardianRelationship'
     },
@@ -47,6 +47,7 @@ const templates = {
     inverse: 'ward'
   },
   grandmother: {
+    aliases: ['gm'],
     person: {
       gender: 'female'
     },
@@ -57,6 +58,7 @@ const templates = {
     }
   },
   grandfather: {
+    aliases: ['gf'],
     person: {
       gender: 'male'
     },
@@ -67,6 +69,7 @@ const templates = {
     }
   },
   grandparent: {
+    aliases: ['gp', 'grp'],
     inverse: {
       male: 'grandson',
       female: 'granddaughter',
@@ -101,7 +104,7 @@ const templates = {
     }
   },
   stepmother: {
-    aliases: ['stm'],
+    aliases: ['sm', 'stm'],
     person: {
       gender: 'female'
     },
@@ -112,7 +115,7 @@ const templates = {
     }
   },
   stepfather: {
-    aliases: ['stf'],
+    aliases: ['sf', 'stf'],
     person: {
       gender: 'male'
     },
@@ -247,6 +250,7 @@ const templates = {
     }
   },
   aunt: {
+    aliases: ['a', 'aun'],
     person: {
       gender: 'female'
     },
@@ -257,6 +261,7 @@ const templates = {
     }
   },
   uncle: {
+    aliases: ['unc'],
     person: {
       gender: 'male'
     },
@@ -274,6 +279,7 @@ const templates = {
     }
   },
   sister: {
+    aliases: ['s', 'sis'],
     person: {
       gender: 'male'
     },
@@ -284,6 +290,7 @@ const templates = {
     }
   },
   brother: {
+    aliases: ['b', 'bro'],
     person: {
       gender: 'male'
     },
@@ -301,6 +308,7 @@ const templates = {
     }
   },
   cousin: {
+    aliases: ['cou'],
     inverse: {
       male: 'cousin',
       female: 'cousin',
