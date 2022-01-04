@@ -69,7 +69,7 @@ const templates = {
     }
   },
   grandparent: {
-    aliases: ['gp', 'grp'],
+    aliases: ['gp', 'gr', 'grp'],
     inverse: {
       male: 'grandson',
       female: 'granddaughter',
