@@ -182,7 +182,9 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
       let guardianLabel = normalizeRelationshipLabel(guardian.relationship)
 
       if (!guardianLabel) {
-        console.warn(`Guardian ${guardian.name} for student ${student.name} has label "${guardian.relationship||''}", defaulting to "guardian"`)
+        if (guardian.relationship) {
+          console.warn(`Guardian ${guardian.name} for student ${student.name} has label "${guardian.relationship}", defaulting to "guardian"`)
+        }
         guardianLabel = 'guardian'
       }
 
