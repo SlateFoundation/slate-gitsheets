@@ -179,7 +179,12 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
         email: guardianEmail = {}
       } = guardian
 
-      const guardianLabel = normalizeRelationshipLabel(guardian.relationship || 'guardian')
+      let guardianLabel = normalizeRelationshipLabel(guardian.relationship)
+
+      if (!guardianLabel) {
+        console.warn(`Guardian ${guardian.name} for student ${student.name} has label "${guardian.relationship||''}", defaulting to "guardian"`)
+        guardianLabel = 'guardian'
+      }
 
       // try to match on exiting user_id annotation first
       if (guardian.user_id) {
