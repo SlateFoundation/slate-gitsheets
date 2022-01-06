@@ -79,15 +79,11 @@ async function loadSlate ({ ref, host, hostName, token, emptyCommit, maxAge }) {
         dirtyRelationships.push(value)
       } else if (op === 'add' && path === '/contact_points') {
         console.log(`\tinsert ${value.length} contact point(s)`)
-
-        // TODO: test this route
-        throw new Error('TODO: test this route')
-
-        // for (const valueItem of value) {
-        //   valueItem[PATCH_USER_KEY] = change.dst
-        //   valueItem[PATCH_PATH_KEY] = path
-        //   dirtyContactPoints.push(valueItem)
-        // }
+        for (const valueItem of value) {
+          valueItem[PATCH_USER_KEY] = change.dst
+          valueItem[PATCH_PATH_KEY] = path
+          dirtyContactPoints.push(valueItem)
+        }
       } else if (op === 'add' && relatedInsertField === 'contact_points') {
         console.log(`\tinsert contact point at position ${relatedInsertPosition === '-' ? change.src[relatedInsertField].length : relatedInsertPosition}`)
         value[PATCH_USER_KEY] = change.dst
