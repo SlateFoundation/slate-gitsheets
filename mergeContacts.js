@@ -42,7 +42,7 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
     usersById.set(user.id, user)
 
     if (user.username) {
-      usersByUsername.set(user.username, user)
+      usersByUsername.set(user.username.toLowerCase(), user)
     }
 
     if (user.student_number) {
@@ -51,7 +51,7 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
 
     for (const { kind, data } of user.contact_points || []) {
       if (kind === KIND_EMAIL) {
-        usersByEmail.set(data, user)
+        usersByEmail.set(data.toLowerCase(), user)
       }
     }
 
@@ -73,7 +73,7 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
     let contactsRowDirty = false
 
     // look up student's existing user
-    const studentUser = usersByUsername.get(student.username)
+    const studentUser = usersByUsername.get(student.username.toLowerCase())
     let studentUserDirty = false
 
     if (!studentUser) {
@@ -151,7 +151,7 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
         studentUserDirty = true
 
         // ensure new email is indexed for future rows
-        usersByEmail.set(data, studentUser)
+        usersByEmail.set(data.toLowerCase(), studentUser)
       } else if (existingContactPoint.label !== label) {
         existingContactPoint.label = label
         studentUserDirty = true
@@ -189,7 +189,7 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
       // try to find parent by email
       if (!guardianUser && guardianEmail) {
         for (const slot in guardianEmail) {
-          const email = guardianEmail[slot]
+          const email = guardianEmail[slot].toLowerCase()
           if (guardianUser = usersByEmail.get(email)) { // eslint-disable-line no-cond-assign
             if (matchedGuardianEmails.has(email)) {
               console.warn(`Guardian ${guardian.name} for student ${student.name} shares email ${email} with previous guardian, deleting...`)
@@ -302,7 +302,7 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
           guardianUserDirty = true
 
           // ensure new email is indexed for future rows
-          usersByEmail.set(data, guardianUser)
+          usersByEmail.set(data.toLowerCase(), guardianUser)
         } else if (existingContactPoint.label !== label) {
           existingContactPoint.label = label
           guardianUserDirty = true
