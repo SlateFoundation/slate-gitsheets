@@ -58,5 +58,23 @@
                 "merge-contacts"
             ]
         },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch: extract-cbl-googlesheet",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "env": {
+                // "SLATE_HOST": "${config:rest-client.environmentVariables.slate.host}",
+                // "SLATE_TOKEN": "${config:rest-client.environmentVariables.slate.token}",
+            },
+            "cwd": "${workspaceFolder:myschool}",
+            "program": "${workspaceFolder}/bin/cli.js",
+            "args": [
+                "extract-cbl-googlesheet"
+            ]
+        },
     ]
 }
