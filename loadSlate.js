@@ -2,7 +2,7 @@
 const Repository = require('gitsheets/lib/Repository')
 const convertRecord = require('./convertRecord')
 const slateLoadMappings = require('./mappings/load')
-const slateExtractMappings = require('./mappings/extract')
+const slateExtractMappings = require('./mappings/extract-slate')
 
 // constants
 const RELATED_INSERT_RE = /^\/(?<field>relationships|contact_points)\/(?<position>[0-9]+|-)$/

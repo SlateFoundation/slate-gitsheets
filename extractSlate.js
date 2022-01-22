@@ -2,7 +2,7 @@
 const Repository = require('gitsheets/lib/Repository')
 const convertRecord = require('./convertRecord')
 const patchUser = require('./patchUser')
-const slateExtractMappings = require('./mappings/extract')
+const slateExtractMappings = require('./mappings/extract-slate')
 
 // constants
 const { EMPTY_TREE_HASH } = require('./constants')
