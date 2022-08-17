@@ -333,7 +333,7 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
           guardianUserDirty = true
           break
         case 1:
-          if (existingWardRelationship[0].label !== wardLabel) {
+          if (existingWardRelationship[0].label !== wardLabel) { // TODO: avoid de-gendering
             existingWardRelationship[0].label = wardLabel
             guardianUserDirty = true
           }
@@ -358,7 +358,7 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
           studentUserDirty = true
           break
         case 1:
-          if (existingGuardianRelationship[0].label !== guardianLabel) {
+          if (existingGuardianRelationship[0].label !== guardianLabel) { // TODO: avoid de-gendering
             existingGuardianRelationship[0].label = guardianLabel
             studentUserDirty = true
           }
