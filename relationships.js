@@ -30,6 +30,7 @@ const templates = {
     }
   },
   parent: {
+    aliases: ['coparent', 'co-parent'],
     relationship: {
       kind: 'Emergence\\People\\GuardianRelationship'
     },
