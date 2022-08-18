@@ -1,4 +1,5 @@
 // dependencies
+const deepEqual = require('fast-deep-equal')
 
 // constants
 
@@ -6,22 +7,43 @@
 async function patchUser (original, patch) {
   for (const field in patch) {
     if (field === 'contact_points') {
-      for (const contactPoint of patch.contact_points) {
+      for (const patchContactPoint of patch.contact_points) {
         let existingContactPoint
 
         if (original.contact_points) {
-          ([existingContactPoint] = original.contact_points.filter(
-            p => p.kind === contactPoint.kind &&
-                 p.data === contactPoint.data
-          ))
+          // prefer a match based on primary key
+          if (patchContactPoint.id) {
+            ([existingContactPoint] = original.contact_points.filter(
+              existingContactPoint => existingContactPoint.id === patchContactPoint.id
+            ))
+          }
+
+          // try to match based on content
+          if (!existingContactPoint) {
+            // trim out any empty keys—existing won't include them
+            if (typeof patchContactPoint.data === 'object') {
+              for (const key in patchContactPoint.data) {
+                if (patchContactPoint.data[key] === null) {
+                  delete patchContactPoint.data[key]
+                }
+              }
+            }
+
+            ([existingContactPoint] = original.contact_points.filter(
+              existingContactPoint => existingContactPoint.kind === patchContactPoint.kind &&
+                                      deepEqual(existingContactPoint.data, patchContactPoint.data)
+            ))
+          }
         } else {
           original.contact_points = []
         }
 
         if (existingContactPoint) {
-          existingContactPoint.label = contactPoint.label
+          existingContactPoint.kind = patchContactPoint.kind
+          existingContactPoint.label = patchContactPoint.label
+          existingContactPoint.data = patchContactPoint.data
         } else {
-          original.contact_points.push(contactPoint)
+          original.contact_points.push(patchContactPoint)
         }
       }
     } else if (field === 'mappings') {
