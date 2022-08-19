@@ -125,14 +125,15 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
 
       const [existingContactPoint] = studentUser.contact_points.filter(
         p => p.kind === KIND_PHONE &&
-             p.data === data
+             (p.data === data || p.label === label)
       )
 
       if (!existingContactPoint) {
         studentUser.contact_points.push({ kind: KIND_PHONE, label, data })
         studentUserDirty = true
-      } else if (existingContactPoint.label !== label) {
+      } else if (existingContactPoint.label !== label || existingContactPoint.data !== data) {
         existingContactPoint.label = label
+        existingContactPoint.data = data
         studentUserDirty = true
       }
     }
@@ -143,7 +144,7 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
 
       const [existingContactPoint] = studentUser.contact_points.filter(
         p => p.kind === KIND_EMAIL &&
-             p.data.localeCompare(data, undefined, { sensitivity: 'accent' }) === 0
+             (p.data.localeCompare(data, undefined, { sensitivity: 'accent' }) === 0 || p.label === label)
       )
 
       if (!existingContactPoint) {
@@ -152,8 +153,9 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
 
         // ensure new email is indexed for future rows
         usersByEmail.set(data.toLowerCase(), studentUser)
-      } else if (existingContactPoint.label !== label) {
+      } else if (existingContactPoint.label !== label || existingContactPoint.data !== data) {
         existingContactPoint.label = label
+        existingContactPoint.data = data
         studentUserDirty = true
       }
     }
@@ -283,14 +285,15 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
 
         const [existingContactPoint] = guardianUser.contact_points.filter(
           p => p.kind === KIND_PHONE &&
-               p.data === data
+               (p.data === data || p.label === label)
         )
 
         if (!existingContactPoint) {
           guardianUser.contact_points.push({ kind: KIND_PHONE, label, data })
           guardianUserDirty = true
-        } else if (existingContactPoint.label !== label) {
+        } else if (existingContactPoint.label !== label || existingContactPoint.data !== data) {
           existingContactPoint.label = label
+          existingContactPoint.data = data
           guardianUserDirty = true
         }
       }
@@ -301,7 +304,7 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
 
         const [existingContactPoint] = guardianUser.contact_points.filter(
           p => p.kind === KIND_EMAIL &&
-               p.data.localeCompare(data, undefined, { sensitivity: 'accent' }) === 0
+               (p.data.localeCompare(data, undefined, { sensitivity: 'accent' }) === 0 || p.label === label)
         )
 
         if (!existingContactPoint) {
@@ -310,8 +313,9 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
 
           // ensure new email is indexed for future rows
           usersByEmail.set(data.toLowerCase(), guardianUser)
-        } else if (existingContactPoint.label !== label) {
+        } else if (existingContactPoint.label !== label || existingContactPoint.data !== data) {
           existingContactPoint.label = label
+          existingContactPoint.data = data
           guardianUserDirty = true
         }
       }
