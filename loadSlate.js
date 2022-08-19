@@ -264,8 +264,7 @@ async function loadSlate ({ ref, host, hostName, token, emptyCommit, maxAge }) {
         dirtyUsers.add(existingUser)
       }
     } catch (err) {
-      logError('Failed to upload people:', err.response && err.response.body ? err.response.body : err.message)
-      return
+      throw new Error('Failed to upload people: ' + getResponseErrorMessage(err))
     }
   }
 
@@ -345,8 +344,7 @@ async function loadSlate ({ ref, host, hostName, token, emptyCommit, maxAge }) {
         dirtyUsers.add(user)
       }
     } catch (err) {
-      logError('Failed to upload contact points:', err.response && err.response.body ? err.response.body : err.message)
-      return
+      throw new Error('Failed to upload contact points: ' + getResponseErrorMessage(err))
     }
   }
 
@@ -436,8 +434,7 @@ async function loadSlate ({ ref, host, hostName, token, emptyCommit, maxAge }) {
         dirtyUsers.add(user)
       }
     } catch (err) {
-      logError('Failed to upload relationships:', err.response && err.response.body ? err.response.body : err.message)
-      return
+      throw new Error('Failed to upload relationships: ' + getResponseErrorMessage(err))
     }
   }
 
@@ -480,3 +477,12 @@ async function loadSlate ({ ref, host, hostName, token, emptyCommit, maxAge }) {
 
 // exports
 module.exports = loadSlate
+
+// library
+function getResponseErrorMessage({ response, message }) {
+  if (!response || !response.body) {
+    return message
+  }
+
+  return response.body.message || response.body
+}

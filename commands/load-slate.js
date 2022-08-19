@@ -81,5 +81,9 @@ exports.handler = async function (argv) {
   }
 
   const commit = await loadSlate(argv)
-  console.log(`commit=${commit || ''}`)
+  if (commit) {
+    console.log(`commit=${commit || ''}`)
+  } else {
+    process.exit(1)
+  }
 }
