@@ -123,10 +123,19 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
       const label = `${slot.substr(0, 1).toUpperCase()}${slot.substr(1).toLowerCase()} Phone`
       const data = normalizePhone(studentPhone[slot])
 
-      const [existingContactPoint] = studentUser.contact_points.filter(
+      // try to match existing record by data first
+      let [existingContactPoint] = studentUser.contact_points.filter(
         p => p.kind === KIND_PHONE &&
-             (p.data === data || p.label === label)
+             p.data === data
       )
+
+      // try to match existing record by label second
+      if (!existingContactPoint) {
+        [existingContactPoint] = studentUser.contact_points.filter(
+          p => p.kind === KIND_PHONE &&
+               p.label === label
+        )
+      }
 
       if (!existingContactPoint) {
         studentUser.contact_points.push({ kind: KIND_PHONE, label, data })
@@ -283,10 +292,19 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
         const label = `${slot.substr(0, 1).toUpperCase()}${slot.substr(1).toLowerCase()} Phone`
         const data = normalizePhone(guardianPhone[slot])
 
-        const [existingContactPoint] = guardianUser.contact_points.filter(
+        // try to match existing record by data first
+        let [existingContactPoint] = guardianUser.contact_points.filter(
           p => p.kind === KIND_PHONE &&
-               (p.data === data || p.label === label)
+               p.data === data
         )
+
+        // try to match existing record by label second
+        if (!existingContactPoint) {
+          [existingContactPoint] = guardianUser.contact_points.filter(
+            p => p.kind === KIND_PHONE &&
+                 p.label === label
+          )
+        }
 
         if (!existingContactPoint) {
           guardianUser.contact_points.push({ kind: KIND_PHONE, label, data })
