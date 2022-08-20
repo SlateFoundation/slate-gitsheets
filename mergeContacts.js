@@ -230,17 +230,6 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
         }
       }
 
-      // parse guardian's name (only for new guardian users)
-      const guardianNameMatch = guardianNameRe.exec(guardian.name)
-      if (!guardianNameMatch) {
-        throw new Error(`could not parse name "${guardian.name}" for guardian to student ${student.username}`)
-      }
-
-      const {
-        first: guardianFirst,
-        last: guardianLast
-      } = guardianNameMatch.groups
-
       // search existing relationships for name+label match
       if (!guardianUser) {
         for (const relationship of studentUser.relationships) {
@@ -251,8 +240,7 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
           const relatedUser = usersById.get(relationship.related_person_id)
           if (
             !relatedUser ||
-                        relatedUser.first_name !== guardianFirst ||
-                        relatedUser.last_name !== guardianLast
+            `${relatedUser.first_name} ${relatedUser.last_name}` !== guardian.name
           ) {
             continue
           }
@@ -264,6 +252,17 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
 
       // create guardian if necessary
       if (!guardianUser) {
+        // parse guardian's name
+        const guardianNameMatch = guardianNameRe.exec(guardian.name)
+        if (!guardianNameMatch) {
+          throw new Error(`could not parse name "${guardian.name}" for guardian to student ${student.username}`)
+        }
+
+        const {
+          first: guardianFirst,
+          last: guardianLast
+        } = guardianNameMatch.groups
+
         guardianUserDirty = true
         guardianUser = {
           id: nextUserId--, // decrement on use so next user gets next negative
