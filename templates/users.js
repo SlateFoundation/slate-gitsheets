@@ -3,13 +3,13 @@ module.exports = {
   root: 'users',
   fields: {
     contact_points: {
-      sort: ['id == null', 'slot', 'id', 'kind', 'label', 'data']
+      sort: ['id == null', 'id', 'slot', 'kind', 'label', 'data']
     },
     id: {
       default: -1
     },
     relationships: {
-      sort: ['id == null', 'slot', 'id', 'kind', 'label', 'related_person_id']
+      sort: ['id == null', 'id', 'slot', 'kind', 'label', 'related_person_id']
     },
     mapping: {
       sort: ['id == null', 'id', 'kind', 'field']
