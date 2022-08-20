@@ -151,10 +151,19 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
       const label = `${slot.substr(0, 1).toUpperCase()}${slot.substr(1).toLowerCase()} Email`
       const data = studentEmail[slot]
 
-      const [existingContactPoint] = studentUser.contact_points.filter(
+      // try to match existing record by data first
+      let [existingContactPoint] = studentUser.contact_points.filter(
         p => p.kind === KIND_EMAIL &&
-             (p.data.localeCompare(data, undefined, { sensitivity: 'accent' }) === 0 || p.label === label)
+        p.data.localeCompare(data, undefined, { sensitivity: 'accent' }) === 0
       )
+
+      // try to match existing record by label second
+      if (!existingContactPoint) {
+        [existingContactPoint] = studentUser.contact_points.filter(
+          p => p.kind === KIND_EMAIL &&
+               p.label === label
+        )
+      }
 
       if (!existingContactPoint) {
         studentUser.contact_points.push({ kind: KIND_EMAIL, label, data })
@@ -320,10 +329,19 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
         const label = `${slot.substr(0, 1).toUpperCase()}${slot.substr(1).toLowerCase()} Email`
         const data = guardianEmail[slot]
 
-        const [existingContactPoint] = guardianUser.contact_points.filter(
+        // try to match existing record by data first
+        let [existingContactPoint] = guardianUser.contact_points.filter(
           p => p.kind === KIND_EMAIL &&
-               (p.data.localeCompare(data, undefined, { sensitivity: 'accent' }) === 0 || p.label === label)
+          p.data.localeCompare(data, undefined, { sensitivity: 'accent' }) === 0
         )
+
+        // try to match existing record by label second
+        if (!existingContactPoint) {
+          [existingContactPoint] = guardianUser.contact_points.filter(
+            p => p.kind === KIND_EMAIL &&
+                 p.label === label
+          )
+        }
 
         if (!existingContactPoint) {
           guardianUser.contact_points.push({ kind: KIND_EMAIL, label, data })
