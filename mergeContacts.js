@@ -192,7 +192,7 @@ async function mergeContacts ({ contactsRef, contactsGitsheet = 'student-contact
 
       // try to match on exiting user_id annotation first
       if (guardian.user_id) {
-        guardianUser = await slateUsersSheet.queryFirst({ id: guardian.user_id })
+        guardianUser = usersById.get(guardian.user_id)
       }
 
       // try to find parent by email
