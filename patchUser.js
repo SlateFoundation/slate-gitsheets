@@ -7,6 +7,8 @@ const deepEqual = require('fast-deep-equal')
 async function patchUser (original, patch) {
   for (const field in patch) {
     if (field === 'contact_points') {
+      // build a fresh array to ensure deleted contact points get removed
+      const mergedContactPoints = [];
       for (const patchContactPoint of patch.contact_points) {
         let existingContactPoint
 
@@ -34,19 +36,21 @@ async function patchUser (original, patch) {
                                       deepEqual(existingContactPoint.data, patchContactPoint.data)
             ))
           }
-        } else {
-          original.contact_points = []
         }
 
         if (existingContactPoint) {
           existingContactPoint.kind = patchContactPoint.kind
           existingContactPoint.label = patchContactPoint.label
           existingContactPoint.data = patchContactPoint.data
-        } else {
-          original.contact_points.push(patchContactPoint)
         }
+
+        mergedContactPoints.push(existingContactPoint || patchContactPoint)
       }
+
+      original.contact_points = mergedContactPoints
     } else if (field === 'mappings') {
+      // build a fresh array to ensure deleted mappings get removed
+      const mergedMappings = [];
       for (const mapping of patch.mappings) {
         let existingMapping
 
@@ -56,19 +60,21 @@ async function patchUser (original, patch) {
                  p.kind === mapping.kind &&
                  (p.field === mapping.field || (!p.field && mapping.field === 'id'))
           ))
-        } else {
-          original.mappings = []
         }
 
         if (existingMapping) {
           existingMapping.field = mapping.field
           existingMapping.key = mapping.key
           existingMapping.matched_via = mapping.matched_via
-        } else {
-          original.mappings.push(mapping)
         }
+
+        mergedMappings.push(existingMapping || mapping)
       }
+
+      original.mappings = mergedMappings
     } else if (field === 'relationships') {
+      // build a fresh array to ensure deleted relationships get removed
+      const mergedRelationships = [];
       for (const relationship of patch.relationships) {
         let existingRelationship
 
@@ -77,8 +83,6 @@ async function patchUser (original, patch) {
             p => p.id === relationship.id ||
                  p.related_person_id === relationship.related_person_id
           ))
-        } else {
-          original.relationships = []
         }
 
         if (existingRelationship) {
@@ -87,10 +91,12 @@ async function patchUser (original, patch) {
               existingRelationship[relationshipField] = relationship[relationshipField]
             }
           }
-        } else {
-          original.relationships.push(relationship)
         }
+
+        mergedRelationships.push(existingRelationship || relationship)
       }
+
+      original.relationships = mergedRelationships
     } else {
       original[field] = patch[field]
     }
