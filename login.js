@@ -4,6 +4,7 @@ const FormData = require('form-data')
 
 // library
 async function login ({ host }) {
+  console.log(`Logging into ${host}`)
   const slateApi = require('./api')({ host })
 
   const loginFormData = new FormData()
